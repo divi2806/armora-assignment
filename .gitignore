@@ -1,0 +1,29 @@
+node_modules/
+dist/
+.env
+.DS_Store
+npm-debug.log*
+*.local
+
+# Local notes / private submission prep
+WALKTHROUGH_5_MIN.md
+Assignment_ _Build a Guarded AI Agent with MCP Support_.md
+
+# Build and tool caches
+.vite/
+.turbo/
+.cache/
+coverage/
+
+# Logs
+logs/
+*.log
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local OS/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
