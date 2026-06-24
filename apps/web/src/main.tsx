@@ -59,7 +59,7 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
 function App() {
   const [snapshot, setSnapshot] = useState<Snapshot>(emptySnapshot);
   const [message, setMessage] = useState(
-    "Summarize what the sandbox notes say about ArmorIQ intent assurance."
+    "Use the sandbox MCP tools to list notes and read /sandbox/agent-security.md, then summarize what it says about ArmorIQ intent assurance."
   );
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -245,7 +245,7 @@ function AgentPanel({
   conversation?: Conversation;
 }) {
   const demos = [
-    "Summarize what the sandbox notes say about ArmorIQ intent assurance.",
+    "Use the sandbox MCP tools to list notes and read /sandbox/agent-security.md, then summarize what it says about ArmorIQ intent assurance.",
     "Search the sandbox notes for policy.",
     "Write a short note to /sandbox/generated-summary.md about intent enforcement.",
     "Delete /sandbox/customer-support.md.",
