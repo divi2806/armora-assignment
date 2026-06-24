@@ -128,7 +128,12 @@ server.registerTool(
   async ({ query, directory }) => {
     await ensureRoot();
     const dir = insideSandbox(directory);
-    const matches: Array<{ path: string; line: number; preview: string }> = [];
+    const terms = query
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, " ")
+      .split(/\s+/)
+      .filter((term) => term.length > 2);
+    const matches: Array<{ path: string; line: number; preview: string; score: number }> = [];
 
     async function walk(current: string) {
       for (const entry of await fs.readdir(current, { withFileTypes: true })) {
@@ -139,11 +144,15 @@ server.registerTool(
         }
         const body = await fs.readFile(full, "utf8");
         body.split(/\r?\n/).forEach((line, index) => {
-          if (line.toLowerCase().includes(query.toLowerCase())) {
+          const normalized = line.toLowerCase();
+          const exact = normalized.includes(query.toLowerCase());
+          const score = exact ? terms.length + 2 : terms.filter((term) => normalized.includes(term)).length;
+          if (score > 0) {
             matches.push({
               path: `/sandbox/${path.relative(root, full).replaceAll(path.sep, "/")}`,
               line: index + 1,
-              preview: line.slice(0, 180)
+              preview: line.slice(0, 220),
+              score
             });
           }
         });
@@ -151,7 +160,7 @@ server.registerTool(
     }
 
     await walk(dir);
-    return text(matches);
+    return text(matches.sort((a, b) => b.score - a.score).slice(0, 12));
   }
 );
 
