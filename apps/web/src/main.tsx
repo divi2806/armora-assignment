@@ -8,6 +8,7 @@ import {
   FileSearch,
   LockKeyhole,
   RefreshCw,
+  RotateCcw,
   Send,
   ShieldCheck,
   SlidersHorizontal,
@@ -98,6 +99,21 @@ function App() {
     }
   }
 
+  async function resetDemo() {
+    setBusy(true);
+    setError(null);
+    try {
+      const nextSnapshot = await api<Snapshot>("/api/demo/reset", { method: "POST" });
+      setSnapshot(nextSnapshot);
+      setActiveConversationId(undefined);
+      setActiveSection("agent");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Demo reset failed.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -112,6 +128,10 @@ function App() {
           <StatusPill tone="warning" icon={<Clock3 size={16} />}>
             {snapshot.approvals.filter((item) => item.status === "pending").length} approvals
           </StatusPill>
+          <button className="reset-button" type="button" onClick={() => void resetDemo()} disabled={busy}>
+            <RotateCcw size={16} aria-hidden="true" />
+            Reset demo
+          </button>
         </div>
       </header>
 
